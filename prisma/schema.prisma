@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        Int    @id @default(autoincrement())
+  user_name String
+  email     String @unique
+  password  String
+  posts     post[]
+}
+
+model post {
+  id       Int    @id @default(autoincrement())
+  title    String @db.VarChar(100)
+  des      String @db.LongText
+  author   user   @relation(fields: [authorId], references: [id])
+  authorId Int
+}
+
+model demo1 {
+  id    Int     @id @default(autoincrement())
+  col1  String // equivalent to varchar
+  col2  String? // equivalent to varchar with nullable
+  col3  String  @unique
+  col4  String  @default("Hello")
+  col5  Int     @db.UnsignedInt // accept only positive value
+  col6  Int
+  col7  BigInt
+  col8  BigInt  @db.UnsignedBigInt // accept only positive value
+  col9  Int     @db.SmallInt
+  col10 Int     @db.UnsignedSmallInt
+  col11 Int     @db.MediumInt
+  col12 Int     @db.UnsignedMediumInt
+  col13 Int     @db.TinyInt
+  col14 Int     @db.UnsignedTinyInt
+  col15 Decimal
+  col16 Float
+  col17 String  @db.VarChar(1000)
+  col18 String  @db.TinyText
+  col19 String  @db.Text
+  col20 String  @db.LongText
+  col21 String  @db.Char(30)
+}
+
+// date time
+
+model demo2 {
+  id   Int      @id @default(autoincrement())
+  col1 DateTime
+  col2 DateTime @db.Date
+  col3 DateTime @db.Time
+  col4 DateTime @db.Timestamp
+  col5 Boolean
+}
+
+// binary file
+
+model demo3 {
+  id   Int      @id @default(autoincrement())
+  col1 Bytes    @db.Blob //binary large object
+  col2 Bytes    @db.LongBlob
+  col3 Bytes    @db.MediumBlob
+  col4 Bytes    @db.VarBinary(100)
+  col5 Bytes    @db.Binary(100)
+  col6 UserType
+}
+
+// options
+enum UserType {
+  Admin
+  Staff
+}
